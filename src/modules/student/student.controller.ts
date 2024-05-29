@@ -1,17 +1,12 @@
-import { NextFunction, Request, RequestHandler, Response } from "express";
+import { RequestHandler } from "express";
 import { StudentServices } from "./student.service";
 import sendResponse from "../../app/utils/sendResponse";
 import httpStatus from "http-status";
+import catchAsync from "../../app/utils/catchAsync";
 
-// Avoid repetition of try catch
-const catchAsync = (fn: RequestHandler) => {
-  return (req: Request, res: Response, next: NextFunction) => {
-    Promise.resolve(fn(req, res, next)).catch((err) => next(err));
-  };
-};
 
 // Create a new controller and get all students
-const getAllStudents: RequestHandler = catchAsync(async (req, res, next) => {
+const getAllStudents: RequestHandler = catchAsync(async (req, res) => {
   const result = await StudentServices.getAllStudentsFromDB();
   // Send response to user from utils
   sendResponse(res, {
@@ -24,7 +19,7 @@ const getAllStudents: RequestHandler = catchAsync(async (req, res, next) => {
 
 // Create a new controller and get a single student
 
-const getSingleStudent: RequestHandler = catchAsync(async (req, res, next) => {
+const getSingleStudent: RequestHandler = catchAsync(async (req, res) => {
   const { studentId } = req.params;
   const result = await StudentServices.getSingleStudentFromDB(studentId);
   // Send response to user from utils
@@ -37,7 +32,7 @@ const getSingleStudent: RequestHandler = catchAsync(async (req, res, next) => {
 });
 
 // Delete student from db
-const deleteStudent: RequestHandler = catchAsync(async (req, res, next) => {
+const deleteStudent: RequestHandler = catchAsync(async (req, res) => {
   const { studentId } = req.params;
 
   const result = await StudentServices.deleteSingleStudentFromDB(studentId);

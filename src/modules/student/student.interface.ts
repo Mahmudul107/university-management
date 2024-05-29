@@ -34,7 +34,7 @@ export type TStudent = {
   password: string;
   name: TUserName;
   gender: "male" | "female" | "other";
-  dob?: string;
+  dateOfBirth?: Date;
   email: string;
   contactNo: string;
   emergencyNo: string;

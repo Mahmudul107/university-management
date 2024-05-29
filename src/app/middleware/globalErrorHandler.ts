@@ -1,4 +1,4 @@
-import express, { NextFunction, Router } from "express";
+import express, { NextFunction } from "express";
 
 const globalErrorHandler = (
   err: any,

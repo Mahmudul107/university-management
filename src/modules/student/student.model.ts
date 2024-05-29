@@ -113,7 +113,7 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       },
       required: [true, 'Please insert a gender'],
     },
-    dob: { type: String, required: [true, 'Please enter your date of birth'] },
+    dateOfBirth: { type: Date, required: [true, 'Please enter your date of birth'] },
     email: {
       type: String,
       required: [true, 'Please enter your email address'],
