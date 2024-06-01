@@ -1,19 +1,19 @@
-import { Schema, model } from 'mongoose'
+import { Schema, Types, model } from "mongoose";
 import {
   TGuardian,
   TLocalGuardian,
   TStudent,
   StudentModel,
   TUserName,
-} from './student.interface'
+} from "./student.interface";
 
 // username sub-schema
 const userNameSchema = new Schema<TUserName>({
   firstName: {
-    type: 'string',
-    required: [true, 'First name is required'],
+    type: "string",
+    required: [true, "First name is required"],
     trim: true,
-    maxlength: [20, 'Max length can not exceed 20 characters'],
+    maxlength: [20, "Max length can not exceed 20 characters"],
     // validate: {
     //   validator: function (value: string) {
     //     const firstNameStr = value.charAt(0).toUpperCase() + value.slice(1)
@@ -23,28 +23,27 @@ const userNameSchema = new Schema<TUserName>({
     // },
   },
   middleName: {
-    type: 'string',
+    type: "string",
     trim: true,
     // required: [true, 'First name is required']
   },
   lastName: {
-    type: 'string',
+    type: "string",
     trim: true,
-    required: [true, 'Last name is required'],
-  
+    required: [true, "Last name is required"],
   },
-})
+});
 
 // guardian sub-schema
 const guardianSchema = new Schema<TGuardian>({
   fatherName: {
     type: String,
     trim: true,
-    required: [true, 'Father name is required'],
+    required: [true, "Father name is required"],
   },
   fatherOccupation: {
     type: String,
-    required: [true, 'Father occupational status is required'],
+    required: [true, "Father occupational status is required"],
   },
   fatherContactNo: {
     type: String,
@@ -64,7 +63,7 @@ const guardianSchema = new Schema<TGuardian>({
     type: String,
     required: [true, "Mother's contact number is required"],
   },
-})
+});
 
 // local guardian sub-schema
 const localGuardianSchema = new Schema<TLocalGuardian>({
@@ -85,54 +84,61 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
     type: String,
     required: [true, "Local guardian's address is required"],
   },
-})
+});
 
 // 2. Create a Schema corresponding to the document interface.
 const studentSchema = new Schema<TStudent, StudentModel>(
   {
     id: {
       type: String,
-      required: [true, 'ID is required'],
+      required: [true, "ID is required"],
       unique: true,
     },
     user: {
       type: Schema.Types.ObjectId,
-      required: [true, 'User ID is required'],
+      required: [true, "User ID is required"],
       unique: true,
-      ref: 'Users',
+      ref: "Users",
     },
     name: {
       type: userNameSchema,
-      required: [true, 'Please enter a student name'],
+      required: [true, "Please enter a student name"],
     },
     gender: {
       type: String,
       enum: {
-        values: ['male', 'female', 'other'],
-        message: '{VALUE} is not a valid gender',
+        values: ["male", "female", "other"],
+        message: "{VALUE} is not a valid gender",
       },
-      required: [true, 'Please insert a gender'],
+      required: [true, "Please insert a gender"],
     },
-    dateOfBirth: { type: Date, required: [true, 'Please enter your date of birth'] },
+    dateOfBirth: {
+      type: Date,
+      required: [true, "Please enter your date of birth"],
+    },
     email: {
       type: String,
-      required: [true, 'Please enter your email address'],
+      required: [true, "Please enter your email address"],
       unique: true,
     },
     contactNo: {
       type: String,
-      required: [true, 'Please enter your contact number'],
+      required: [true, "Please enter your contact number"],
     },
-    emergencyNo: {
+    emergencyContactNo: {
       type: String,
-      required: [true, 'Please enter your emergency contact number'],
+      required: [true, "Please enter your emergency contact number"],
     },
     bloodGroup: {
       type: String,
-      enum: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
+      enum: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
       required: true,
     },
     presentAddress: { type: String, required: true },
+    permanentAddress: {
+      type: String,
+      required: [true, 'Permanent address is required'],
+    },
     guardian: {
       type: guardianSchema,
       required: true,
@@ -142,7 +148,12 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       type: localGuardianSchema,
       required: true,
     },
-    profileImage: { type: String, required: true },
+    profileImg: { type: String, required: true },
+    admissionSemester: {
+      type: Schema.Types.ObjectId,
+      ref: "AcademicSemester",
+    },
+
     isDeleted: {
       type: Boolean,
       default: false,
@@ -152,39 +163,37 @@ const studentSchema = new Schema<TStudent, StudentModel>(
     toJSON: {
       virtuals: true,
     },
-  },
-)
+  }
+);
 
 // Mongoose virtual
-studentSchema.virtual('fullName').get(function () {
-  return `${this.name.firstName} ${this.name.middleName} ${this.name.lastName}`
-})
-
+studentSchema.virtual("fullName").get(function () {
+  return `${this.name.firstName} ${this.name.middleName} ${this.name.lastName}`;
+});
 
 // Query middleware/hook
-studentSchema.pre('find', function (next) {
-  this.find({ isDeleted: { $ne: true } })
-  next()
-})
+studentSchema.pre("find", function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
 
 // Query middleware/hook for preventing to get deleted data
-studentSchema.pre('findOne', function (next) {
-  this.find({ isDeleted: { $ne: true } })
-  next()
-})
+studentSchema.pre("findOne", function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
 
 // Query middleware/hook for preventing to get deleted data: aggregate
-studentSchema.pre('aggregate', function (next) {
-  this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } })
-  next()
-})
+studentSchema.pre("aggregate", function (next) {
+  this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
+  next();
+});
 
 //Creating a custom static method
 studentSchema.statics.isUserExists = async function (id: string) {
-  const existingUser = await Student.findOne({ id })
-  return existingUser
-}
-
+  const existingUser = await Student.findOne({ id });
+  return existingUser;
+};
 
 // Creating a model
-export const Student = model<TStudent, StudentModel>('Student', studentSchema)
+export const Student = model<TStudent, StudentModel>("Student", studentSchema);

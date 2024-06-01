@@ -37,13 +37,14 @@ export type TStudent = {
   dateOfBirth?: Date;
   email: string;
   contactNo: string;
-  emergencyNo: string;
+  emergencyContactNo: string;
   bloodGroup?: "A+" | "A-" | "B+" | "B-" | "AB+" | "AB-" | "O+" | "O-";
   presentAddress?: string;
   permanentAddress?: string;
   guardian: TGuardian;
   localGuardian: TLocalGuardian;
-  profileImage?: string;
+  profileImg?: string;
+  admissionSemester: Types.ObjectId;
   isDeleted: boolean;
 };
 

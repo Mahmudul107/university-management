@@ -45,5 +45,4 @@ export const AcademicSemesterServices = {
   getAllAcademicSemestersFromDB,
   getSingleAcademicSemesterFromDB,
   updateAcademicSemesterIntoDB,
-  
 };
