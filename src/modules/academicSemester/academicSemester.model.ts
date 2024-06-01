@@ -1,7 +1,8 @@
 import { Schema, model } from "mongoose";
-// import { TAcademicSemester } from "./academicSemester.interface";
 import { AcademicSemesterCode, AcademicSemesterName, Months } from "./academicSemester.constant";
 import { TAcademicSemester } from "./academicSemester.interface";
+import AppError from "../../app/errors/AppError";
+import httpStatus from "http-status";
 
 const academicSemesterSchema = new Schema<TAcademicSemester>(
   {
@@ -41,7 +42,7 @@ academicSemesterSchema.pre('save', async function(next){
     name: this.name
   })
   if(isSemesterExits){
-    throw new Error('Semester is already exists')
+    throw new AppError(httpStatus.NOT_FOUND, 'Semester is already exists')
   }
   next();
 })
