@@ -4,7 +4,7 @@ import { User } from "./user.model";
 const findLastStudentId = async () => {
   const lastStudent = await User.findOne(
     {
-      role: 'student',
+      role: "student",
     },
     {
       id: 1,
@@ -39,7 +39,7 @@ export const generateStudentId = async (payload: TAcademicSemester) => {
     currentId = lastStudentId.substring(6); // 00001
   }
 
-  let incrementId = (Number(currentId) + 1).toString().padStart(4, '0');
+  let incrementId = (Number(currentId) + 1).toString().padStart(4, "0");
 
   incrementId = `${payload.year}${payload.code}${incrementId}`;
 

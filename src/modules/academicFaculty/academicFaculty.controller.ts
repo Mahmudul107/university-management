@@ -6,7 +6,7 @@ import { AcademicFacultyServices } from "./academicFaculty.service";
 // Create a new AcademicFacultyService
 const createAcademicFaculty = catchAsync(async (req, res) => {
   const result = await AcademicFacultyServices.createAcademicFacultyIntoDB(
-    req.body
+    req.body,
   );
 
   sendResponse(res, {
@@ -48,7 +48,7 @@ const updateAcademicFaculty = catchAsync(async (req, res) => {
   const { facultyId } = req.params;
   const result = await AcademicFacultyServices.updateAcademicFacultyIntoDB(
     facultyId,
-    req.body
+    req.body,
   );
 
   sendResponse(res, {

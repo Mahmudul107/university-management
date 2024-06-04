@@ -63,11 +63,10 @@ const updateStudentIntoDB = async (id: string, payload: Partial<TStudent>) => {
   console.log(modifiedUpdateData);
 
   // const result = await Student.findOne({ id })
-  const result = await Student.findOneAndUpdate(
-    { id },
-     modifiedUpdateData,
-     {new: true, runValidators: true}
-  )
+  const result = await Student.findOneAndUpdate({ id }, modifiedUpdateData, {
+    new: true,
+    runValidators: true,
+  });
   return result;
 };
 
@@ -124,7 +123,7 @@ const deleteSingleStudentFromDB = async (id: string) => {
     const deletedStudent = await Student.findOneAndUpdate(
       { id },
       { isDeleted: true },
-      { new: true, session }
+      { new: true, session },
     );
 
     if (!deletedStudent) {
@@ -134,7 +133,7 @@ const deleteSingleStudentFromDB = async (id: string) => {
     const deletedUser = await User.findOneAndUpdate(
       { id },
       { isDeleted: true },
-      { new: true, session }
+      { new: true, session },
     );
 
     if (!deletedUser) {

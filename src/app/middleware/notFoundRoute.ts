@@ -1,15 +1,11 @@
-import { NextFunction, Response } from 'express';
-import { Request } from 'express';
-import httpStatus from 'http-status';
-const notFound = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+import { NextFunction, Response } from "express";
+import { Request } from "express";
+import httpStatus from "http-status";
+const notFound = (req: Request, res: Response, next: NextFunction) => {
   return res.status(httpStatus.NOT_FOUND).json({
     success: false,
-    message: 'API not found',
-    error: '',
+    message: "API not found",
+    error: "",
   });
 };
 

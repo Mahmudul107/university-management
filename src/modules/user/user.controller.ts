@@ -6,7 +6,6 @@ import catchAsync from "../../app/utils/catchAsync";
 
 // Avoid repetition of try catch
 
-
 // Get create student from user service
 const createStudent: RequestHandler = catchAsync(async (req, res) => {
   const { password, student: studentData } = req.body;

@@ -137,7 +137,7 @@ const studentSchema = new Schema<TStudent, StudentModel>(
     presentAddress: { type: String, required: true },
     permanentAddress: {
       type: String,
-      required: [true, 'Permanent address is required'],
+      required: [true, "Permanent address is required"],
     },
     guardian: {
       type: guardianSchema,
@@ -161,13 +161,13 @@ const studentSchema = new Schema<TStudent, StudentModel>(
     academicDepartment: {
       type: Schema.Types.ObjectId,
       ref: "AcademicDepartment",
-    }
+    },
   },
   {
     toJSON: {
       virtuals: true,
     },
-  }
+  },
 );
 
 // Mongoose virtual

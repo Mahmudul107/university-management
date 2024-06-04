@@ -9,9 +9,9 @@ const router = express.Router();
 router.post(
   "/create-academic-semester",
   validateRequest(
-    AcademicSemesterValidation.createAcademicSemesterValidationSchema
+    AcademicSemesterValidation.createAcademicSemesterValidationSchema,
   ),
-  AcademicSemesterController.createAcademicSemester
+  AcademicSemesterController.createAcademicSemester,
 );
 
 // Get all academic semesters
@@ -20,16 +20,16 @@ router.get("/", AcademicSemesterController.getAllAcademicSemesters);
 // Get single academic semester
 router.get(
   "/:semesterId",
-  AcademicSemesterController.getSingleAcademicSemester
+  AcademicSemesterController.getSingleAcademicSemester,
 );
 
 // Get update academic semester
 router.patch(
   "/:semesterId",
   validateRequest(
-    AcademicSemesterValidation.updateAcademicSemesterValidationSchema
+    AcademicSemesterValidation.updateAcademicSemesterValidationSchema,
   ),
-  AcademicSemesterController.updateAcademicSemester
+  AcademicSemesterController.updateAcademicSemester,
 );
 
 export const AcademicSemesterRoutes = router;

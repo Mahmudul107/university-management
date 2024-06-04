@@ -3,12 +3,12 @@ import { UserController } from "./user.controller";
 import { createStudentValidationSchema } from "../student/student.validation";
 import validateRequest from "../../app/middleware/validateRequest";
 
-const router = express.Router()
+const router = express.Router();
 
 router.post(
   "/create-student",
   validateRequest(createStudentValidationSchema),
-  UserController.createStudent
+  UserController.createStudent,
 );
 
 export const UserRoutes = router;

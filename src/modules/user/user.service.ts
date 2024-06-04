@@ -21,7 +21,7 @@ const createStudentIntoDB = async (password: string, payload: TStudent) => {
 
   // find academic semester info
   const admissionSemester = await AcademicSemester.findById(
-    payload.admissionSemester
+    payload.admissionSemester,
   );
 
   // Transaction and Rollback: Create session and Start session
@@ -31,8 +31,11 @@ const createStudentIntoDB = async (password: string, payload: TStudent) => {
     // Start transaction
     session.startTransaction();
 
-    if(!admissionSemester){
-      throw new AppError(httpStatus.BAD_REQUEST ,'admission semester not found')
+    if (!admissionSemester) {
+      throw new AppError(
+        httpStatus.BAD_REQUEST,
+        "admission semester not found",
+      );
     }
     //set  generated id
     userData.id = await generateStudentId(admissionSemester);
@@ -48,7 +51,6 @@ const createStudentIntoDB = async (password: string, payload: TStudent) => {
     // set id , _id as user
     payload.id = newUser[0].id;
     payload.user = newUser[0]._id; //reference _id
-
 
     // create a student (transaction-2)
     const newStudent = await Student.create([payload], { session });
