@@ -64,11 +64,11 @@ const createStudentIntoDB = async (password: string, payload: TStudent) => {
     await session.endSession();
 
     return newStudent;
-  } catch (err) {
+  } catch (err:any) {
     await session.abortTransaction();
     console.log(err);
     await session.endSession();
-    throw new AppError(httpStatus.NOT_FOUND, "Failed to create student");
+    throw new AppError(httpStatus.NOT_FOUND, err);
   }
 };
 
