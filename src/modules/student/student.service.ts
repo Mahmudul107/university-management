@@ -7,11 +7,10 @@ import { TStudent } from "./student.interface";
 
 // Business logic
 const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
+  console.log("Base query", query);
+  const queryObj = { ...query }; // Copied
 
-  // console.log('Base query', query);
-  const queryObj = {...query} // Copied
-
-  const studentSearchAbleField = ["email", "name.firstName", "presentAddress"]
+  const studentSearchAbleField = ["email", "name.firstName", "presentAddress"];
   let searchTerm = "";
 
   if (query?.searchTerm) {
@@ -22,15 +21,14 @@ const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
     $or: studentSearchAbleField.map((field) => ({
       [field]: { $regex: searchTerm, $options: "i" },
     })),
-  })
+  });
 
   // Filtering
-  const excludeFields = ['searchTerm']
-  excludeFields.forEach((el) => delete queryObj[el])
+  const excludeFields = ["searchTerm", "sort", "limit"];
+  excludeFields.forEach((el) => delete queryObj[el]);
 
-
-
-  const result = await searchQuery.find(queryObj)
+  const fitterQuery = searchQuery
+    .find(queryObj)
     .populate("admissionSemester")
     .populate({
       path: "academicDepartment",
@@ -38,7 +36,23 @@ const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
         path: "academicFaculty",
       },
     });
-  return result;
+
+  // Sorting
+  let sort = "-createdAt";
+  if (query.sort) {
+    sort = query.sort as string;
+  }
+
+  const sortQuery = fitterQuery.sort(sort);
+
+  // Limit
+  let limit = 1;
+  if (query.limit) {
+    limit = query.limit as number;
+  }
+  const limitQuery = await sortQuery.limit(limit);
+  
+  return limitQuery;
 };
 
 const getSingleStudentFromDB = async (id: string) => {
