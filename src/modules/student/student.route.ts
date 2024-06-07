@@ -11,13 +11,13 @@ const router = express.Router();
 router.get("/", StudentController.getAllStudents);
 
 router.patch(
-  "/:studentId",
+  "/:id",
   validateRequest(updateStudentValidationSchema),
   StudentController.UpdateStudent,
 );
 
-router.get("/:studentId", StudentController.getSingleStudent);
+router.get("/:id", StudentController.getSingleStudent);
 
-router.delete("/:studentId", StudentController.deleteStudent);
+router.delete("/:id", StudentController.deleteStudent);
 
 export const StudentRoutes = router;
