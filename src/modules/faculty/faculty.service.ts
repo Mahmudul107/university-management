@@ -83,7 +83,8 @@ const deleteFacultyFromDB = async (id: string) => {
     await session.endSession();
 
     return deletedFaculty;
-  } catch (err: any) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (err:any) {
     await session.abortTransaction();
     await session.endSession();
     throw new Error(err);
